@@ -101,6 +101,8 @@
         
         const csrftoken = getCookie('csrftoken');
 
+        var item = null;
+
         buildList()
 
         function buildList(){
@@ -137,6 +139,15 @@
                     `
                     wrapper.innerHTML += item
                 }
+
+                for (var i in list){
+                    var editBtn = document.getElementsByClassName('edit')[i]
+                    editBtn.addEventListener('click', (function(item){
+                        return function(){
+                            editItem(item)
+                        }
+                    })(list[i]))
+                }
             })
         }
 
@@ -145,6 +156,10 @@
             e.preventDefault()
             console.log('Form submitted')
             var url = 'http://127.0.0.1:8000/api/task-create/'
+            if (activeItem != null){
+                var url = `http://127.0.0.1:8000/api/task-update/${activeItem.id}/`
+                activeItem = null
+            }
             var title = document.getElementById('title').value
             fetch(url, {
                 method: 'POST',
@@ -159,6 +174,11 @@
             })
         })
 
+        function editItem(item){
+            console.log('Item clicked:', item)
+            activeItem = item
+            document.getElementById('title').value = item.title
+        }
     </script>
 
 </body>
