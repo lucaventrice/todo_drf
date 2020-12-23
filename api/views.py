@@ -1,4 +1,5 @@
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .serializers import TaskSerializer
 from .models import Task
@@ -17,7 +18,7 @@ def api_overview(request):
 
 @api_view(['GET'])
 def task_list(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.filter(user=request.user)
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
@@ -30,16 +31,21 @@ def task_detail(request, pk):
 @api_view(['POST'])
 def task_create(request):
     serializer = TaskSerializer(data=request.data)
-
+    
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(user=request.user)
 
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes((IsAuthenticated,))
 def task_update(request, pk):
     task = Task.objects.get(id=pk)
     serializer = TaskSerializer(instance=task, data=request.data)
+
+    user = request.user
+    if task.user != user:
+        return Response({'response': "You don't have permission to edit that."})
 
     if serializer.is_valid():
         serializer.save()
@@ -47,8 +53,14 @@ def task_update(request, pk):
     return Response(serializer.data)
 
 @api_view(['DELETE'])
+@permission_classes((IsAuthenticated,))
 def task_delete(request, pk):
     task = Task.objects.get(id=pk)
+
+    user = request.user
+    if task.user != user:
+        return Response({'response': "You don't have permission to delete that."})
+
     task.delete()
 
     return Response("Task deleted!")
