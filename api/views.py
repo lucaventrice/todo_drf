@@ -51,7 +51,7 @@ def task_update(request, pk):
 
     user = request.user
     if task.user != user:
-        return Response({'response': 'You don't have permission to edit that.'})
+        return Response({'response': "You don't have permission to edit that."})
 
     if serializer.is_valid():
         serializer.save()
@@ -66,7 +66,7 @@ def task_delete(request, pk):
 
     user = request.user
     if task.user != user:
-        return Response({'response': 'You don't have permission to delete that.'})
+        return Response({'response': "You don't have permission to delete that."})
 
     task.delete()
 
