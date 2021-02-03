@@ -1,0 +1,25 @@
+{% extends 'frontend/base.html' %} {% load static %} {% block content %}
+<header>
+    <style>
+        #task-container {
+            padding: 10px;
+        }
+
+        #form-wrapper {
+            border-bottom: 1px solid #85baa1;
+            background-color: #85baa1;
+        }
+    </style>
+</header>
+
+<div class="container">
+    <div id="form-wrapper">
+        <div id="task-container">
+            <h1>Logout</h1>
+            <p>You have been logged out</p>
+            <a href="{% url 'login' %}">Log In Again</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
