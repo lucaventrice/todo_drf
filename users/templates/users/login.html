@@ -1,31 +1,27 @@
 {% extends 'frontend/base.html' %} {% load static %} {% block content %}
 <header>
-  <style>
-    #task-container {
-      padding: 10px;
-    }
+    <style>
+        #task-container {
+            padding: 10px;
+        }
 
-    #form-wrapper {
-      border-bottom: 1px solid #85baa1;
-      background-color: #85baa1;
-    }
-  </style>
+        #form-wrapper {
+            border-bottom: 1px solid #85baa1;
+            background-color: #85baa1;
+        }
+    </style>
 </header>
 
 <div class="container">
-  <div id="form-wrapper">
-    <div id="task-container">
-      <h1>Login</h1>
-      <form method="post" id="form">
-        {% csrf_token %} {{ form.as_p }}
-        <input
-          type="submit"
-          value="Login"
-          class="btn btn-sm btn-outline-dark"
-        />
-      </form>
+    <div id="form-wrapper">
+        <div id="task-container">
+            <h1>Login</h1>
+            <form method="post" id="form">
+                {% csrf_token %} {{ form.as_p }}
+                <input type="submit" value="Login" class="btn btn-sm btn-outline-dark" />
+            </form>
+        </div>
     </div>
-  </div>
 </div>
 
 {% endblock content %}
