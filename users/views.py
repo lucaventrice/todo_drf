@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect
-from .forms import SignUpForm
 from django.contrib import messages
+from django.shortcuts import redirect
+from django.shortcuts import render
+
+from .forms import SignUpForm
+
 
 def register(request):
     if request.method == 'POST':
