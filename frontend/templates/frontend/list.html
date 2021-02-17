@@ -2,6 +2,41 @@
 {% load static %}
 {% block content %}
 
+<style>
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        appearance: none;
+        outline: 0;
+        box-shadow: none;
+        border: 0 !important;
+        background-image: none;
+    }
+
+    .select {
+        margin: 0.5rem;
+        overflow: hidden;
+    } 
+
+    select {
+        color: #7cb69a;
+        font-family: "Poppins", sans-serif;
+        cursor: pointer;
+        width: 7rem;
+    }
+
+    .select::after {
+        content: "\25BC";
+        color: #7cb69a;
+        top: 0;
+        right: 0;
+        padding: 1rem;
+        cursor: pointer;
+        pointer-events: none;
+    }
+</style>
+
 <div class="container">
     <div id="logout-container">
         <a href="{% url 'logout' %}">Logout</a>
@@ -19,7 +54,15 @@
                     <div style="flex: 1">
                         <input id="submit" class="btn" type="submit">
                     </div>
+                    <div style="flex: 2 padding-right:0" class="select">
+                        <select name="todos" class="filter-todo">
+                            <option value="all">All</option>
+                            <option value="completed">Completed</option>
+                            <option value="uncompleted">Uncompleted</option>
+                    </select>
                 </div>
+                </div>
+
             </form>
         </div>
 
@@ -30,6 +73,7 @@
 </div>
 
 <script type="text/javascript">
+
     // csrf token with ajax
     function getCookie(name) {
         let cookieValue = null;
@@ -55,6 +99,7 @@
 
     function buildList() {
         var wrapper = document.getElementById('list-wrapper')
+        wrapper.innerHTML = '';
 
         var url = 'http://127.0.0.1:8000/api/task-list/'
 
@@ -65,6 +110,15 @@
 
                 var list = data
                 for (var i in list) {
+                    console.log(filterOption.value)
+
+                    if (filterOption.value == "completed" && !list[i].completed){
+                        continue
+                    } 
+                    if (filterOption.value == "uncompleted" && list[i].completed){
+                        continue
+                    } 
+
                     try {
                         document.getElementById(`data-row-${i}`).remove()
                     } catch (error) {
@@ -194,6 +248,12 @@
             buildList()
         })
     }
+
+    const filterOption = document.querySelector(".filter-todo");
+    filterOption.addEventListener("change", ()=> {
+        buildList()
+    });
+
 
 </script>
 
