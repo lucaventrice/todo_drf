@@ -136,3 +136,6 @@ STATIC_URL = '/static/'
 
 #  Login
 LOGIN_REDIRECT_URL = 'list'
+
+# Referencing User Model
+AUTH_USER_MODEL = 'users.CustomUser'
