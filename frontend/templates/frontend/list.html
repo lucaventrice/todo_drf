@@ -68,11 +68,23 @@
                     <div style="flex: 6">
                         <input id="name" class="form-control" type="text" name="name" placeholder="Add group">
                     </div>
+
                     <div style="flex: 1">
                         <input id="submit-group" class="btn" type="submit">
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="group-form">
+
+            {% for lists in list %}
+            <p>{{name}}</p>
+            {% endfor %}
+            <!-- {% for i in task_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="#">{{ task_list.name }}</a>
+            </li>
+            {% endfor %} -->
         </div>
         <!-- <a href="#task-list-1">Task list 1</a> -->
         <div id="group-list-wrapper">
@@ -136,115 +148,115 @@
     }
     const csrftoken = getCookie('csrftoken');
 
-    var activeGroupItem = null;
-    var group_snapshot = []
+    // var activeGroupItem = null;
+    // var group_snapshot = []
 
-    buildGroup()
+    // buildGroup()
 
-    function buildGroup() {
-        var wrapper = document.getElementById('group-list-wrapper')
-        wrapper.innerHTML = '';
+    // function buildGroup() {
+    //     var wrapper = document.getElementById('group-list-wrapper')
+    //     wrapper.innerHTML = '';
 
-        var url = 'http://127.0.0.1:8000/api/group-list/'
+    //     var url = 'http://127.0.0.1:8000/api/group-list/'
 
-        fetch(url)
-            .then((resp) => resp.json())
-            .then(function (data) {
-                console.log('GroupData', data)
-                var list = data
+    //     fetch(url)
+    //         .then((resp) => resp.json())
+    //         .then(function (data) {
+    //             console.log('GroupData', data)
+    //             var list = data
 
-                for (var i in list) {
-                    var item = `
-                        <div id="data-row-${i}" class="group-wrapper flex-wrapper">
-                            <div style="flex: 7">
-                                ${name}
-                            </div>
-                            <div style="flex: 1">
-                            <button class="btn btn-sm btn-outline-info edit-group">
-                                Edit
-                            </button>
-                        </div>
-                        <div style="flex: 1">
-                                <button class="btn btn-sm btn-outline-dark delete-group">
-                                    Delete
-                                </button>
-                        </div>
-                        </div>
-                    `
-                    wrapper.innerHTML += item
-                }
+    //             for (var i in list) {
+    //                 var item = `
+    //                     <div id="data-row-${i}" class="group-wrapper flex-wrapper">
+    //                         <div style="flex: 7">
+    //                             ${name}
+    //                         </div>
+    //                         <div style="flex: 1">
+    //                         <button class="btn btn-sm btn-outline-info edit-group">
+    //                             Edit
+    //                         </button>
+    //                     </div>
+    //                     <div style="flex: 1">
+    //                             <button class="btn btn-sm btn-outline-dark delete-group">
+    //                                 Delete
+    //                             </button>
+    //                     </div>
+    //                     </div>
+    //                 `
+    //                 wrapper.innerHTML += item
+    //             }
 
-                if (group_snapshot.length > list.length) {
-                    for (var i = list.length; i < group_snapshot.length; i++) {
-                        document.getElementById(`data-row-${i}`).remove()
-                    }
-                }
+    //             if (group_snapshot.length > list.length) {
+    //                 for (var i = list.length; i < group_snapshot.length; i++) {
+    //                     document.getElementById(`data-row-${i}`).remove()
+    //                 }
+    //             }
 
-                group_snapshot = list
+    //             group_snapshot = list
 
-                for (var i in list) {
-                    var editGroup = document.getElementsByClassName('edit-group')[i]
-                    var deleteGroup = document.getElementsByClassName('delete-group')[i]
-                    var name = document.getElementsByClassName('name')[i]
+    //             for (var i in list) {
+    //                 var editGroup = document.getElementsByClassName('edit-group')[i]
+    //                 var deleteGroup = document.getElementsByClassName('delete-group')[i]
+    //                 var name = document.getElementsByClassName('name')[i]
 
-                    editGroup.addEventListener('click', (function (item) {
-                        return function () {
-                            editGroup(item)
-                        }
-                    })(list[i]))
+    //                 editGroup.addEventListener('click', (function (item) {
+    //                     return function () {
+    //                         editGroup(item)
+    //                     }
+    //                 })(list[i]))
 
-                    deleteGroup.addEventListener('click', (function (item) {
-                        return function () {
-                            deleteGroup(item)
-                        }
-                    })(list[i]))
-                }
+    //                 deleteGroup.addEventListener('click', (function (item) {
+    //                     return function () {
+    //                         deleteGroup(item)
+    //                     }
+    //                 })(list[i]))
+    //             }
 
-            })
+    //         })
 
-    }
+    // }
 
-    var group_form = document.getElementById('group-wrapper')
-    group_form.addEventListener('submit-group', function (e) {
-        e.preventDefault()
-        console.log('Group submitted')
-        var url = 'http://127.0.0.1:8000/api/group-create/'
-        if (activeItem != null) {
-            var url = `http://127.0.0.1:8000/api/group-update/${activeGroupItem.id}/`
-            activeGroupItem = null
-        }
-        var name = document.getElementById('name').value
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-            body: JSON.stringify({ 'name': name })
-        }).then(function (response) {
-            buildGroup()
-            document.getElementById('group-form').reset()
-        })
-    })
+    // var group_form = document.getElementById('group-wrapper')
+    // group_form.addEventListener('submit-group', function (e) {
+    //     e.preventDefault()
+    //     console.log('Group submitted')
+    //     var url = 'http://127.0.0.1:8000/api/group-create/'
+    //     if (activeItem != null) {
+    //         var url = `http://127.0.0.1:8000/api/group-update/${activeGroupItem.id}/`
+    //         activeGroupItem = null
+    //     }
+    //     var name = document.getElementById('name').value
+    //     fetch(url, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-type': 'application/json',
+    //             'X-CSRFToken': csrftoken,
+    //         },
+    //         body: JSON.stringify({ 'name': name })
+    //     }).then(function (response) {
+    //         buildGroup()
+    //         document.getElementById('group-form').reset()
+    //     })
+    // })
 
-    function editGroup(group) {
-        console.log('Group clicked:', group)
-        activeGroupItem = group
-        document.getElementById('name').value = activeGroupItem.name
-    }
+    // function editGroup(group) {
+    //     console.log('Group clicked:', group)
+    //     activeGroupItem = group
+    //     document.getElementById('name').value = activeGroupItem.name
+    // }
 
-    function deleteGroup(group) {
-        console.log('Delete Group clicked')
-        fetch(`http://127.0.0.1:8000/api/group-delete/${group.id}/`, {
-            method: 'DELETE',
-            headers: {
-                'Content-type': 'application/json',
-                'X-CSRFToken': csrftoken,
-            },
-        }).then((response) => {
-            buildGroupList()
-        })
-    }
+    // function deleteGroup(group) {
+    //     console.log('Delete Group clicked')
+    //     fetch(`http://127.0.0.1:8000/api/group-delete/${group.id}/`, {
+    //         method: 'DELETE',
+    //         headers: {
+    //             'Content-type': 'application/json',
+    //             'X-CSRFToken': csrftoken,
+    //         },
+    //     }).then((response) => {
+    //         buildGroupList()
+    //     })
+    // }
 
     var activeItem = null;
     var list_snapshot = []

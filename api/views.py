@@ -3,8 +3,8 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Task, TaskGroup
-from .serializers import TaskSerializer, TaskGroupSerializer
+from .models import Task
+from .serializers import TaskSerializer
 
 
 @api_view(['GET'])
@@ -15,11 +15,11 @@ def api_overview(request):
         'Task Create': '/task-create/',
         'Task Update': '/task-update/<str:pk>/',
         'Task Delete': '/task-delete/<str:pk>/',
-        'Group List': '/group-list/',
-        'Group Detail View': '/group-detail/<str:pk>/',
-        'Group Create': '/group-create/',
-        'Group Update': '/group-update/<str:pk>/',
-        'Group Delete': '/group-delete/<str:pk>/',
+        # 'Group List': '/group-list/',
+        # 'Group Detail View': '/group-detail/<str:pk>/',
+        # 'Group Create': '/group-create/',
+        # 'Group Update': '/group-update/<str:pk>/',
+        # 'Group Delete': '/group-delete/<str:pk>/',
     }
     return Response(api_urls)
 
@@ -37,57 +37,57 @@ def task_detail(request, pk):
     serializer = TaskSerializer(tasks, many=False)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def group_detail(request, pk):
-    groups = TaskGroup.objects.get(id=pk)
-    serializer = TaskGroupSerializer(groups, many=False)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def group_detail(request, pk):
+#     groups = TaskGroup.objects.get(id=pk)
+#     serializer = TaskGroupSerializer(groups, many=False)
+#     return Response(serializer.data)
 
-@api_view(['GET'])
-def group_list(request):
-    groups = TaskGroup.objects.filter(name=TaskGroup.name)
-    serializer = TaskGroupSerializer(groups, many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def group_list(request):
+#     groups = TaskGroup.objects.filter(name=TaskGroup.name)
+#     serializer = TaskGroupSerializer(groups, many=True)
+#     return Response(serializer.data)
 
-@api_view(['POST'])
-def group_create(request):
-    serializer = TaskGroupSerializer(data=request.data)
+# @api_view(['POST'])
+# def group_create(request):
+#     serializer = TaskGroupSerializer(data=request.data)
 
-    if serializer.is_valid():
-        serializer.save(user=request.user)
+#     if serializer.is_valid():
+#         serializer.save(user=request.user)
 
-    return Response(serializer.data)
+#     return Response(serializer.data)
 
-@api_view(['POST'])
-@permission_classes((IsAuthenticated,))
-def group_update(request, pk):
-    group = TaskGroup.objects.get(id=pk)
-    serializer = TaskSerializer(instance=group, data=request.data)
+# @api_view(['POST'])
+# @permission_classes((IsAuthenticated,))
+# def group_update(request, pk):
+#     group = TaskGroup.objects.get(id=pk)
+#     serializer = TaskSerializer(instance=group, data=request.data)
 
-    user = request.user
-    if group.user != user:
-        return Response({'response': "You don't have permission to edit that."})
+#     user = request.user
+#     if group.user != user:
+#         return Response({'response': "You don't have permission to edit that."})
 
-    if serializer.is_valid():
-        serializer.save()
+#     if serializer.is_valid():
+#         serializer.save()
 
-    return Response(serializer.data)
+#     return Response(serializer.data)
 
 
-@api_view(['DELETE'])
-@permission_classes((IsAuthenticated,))
-def group_delete(request, pk):
-    group = TaskGroup.objects.get(id=pk)
+# @api_view(['DELETE'])
+# @permission_classes((IsAuthenticated,))
+# def group_delete(request, pk):
+#     group = TaskGroup.objects.get(id=pk)
 
-    user = request.user
-    if group.user != user:
-        return Response({'response': "You don't have permission to delete that."})
+#     user = request.user
+#     if group.user != user:
+#         return Response({'response': "You don't have permission to delete that."})
     
-    # check for active tasks using group and deny deletion
+#     # check for active tasks using group and deny deletion
 
-    group.delete()
+#     group.delete()
 
-    return Response('Group deleted!')
+#     return Response('Group deleted!')
 
 @api_view(['POST'])
 def task_create(request):
